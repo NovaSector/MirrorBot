@@ -32,7 +32,7 @@ def mirror_pr(upstream, downstream, pr_id):
 		clean_repo()
 		logger.debug("Switching to mirror branch.")
 		subprocess.run(["git", "checkout", "-b", f"{config.mirror_branch_prefix}{pr_id}"],
-		               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+		               )
 
 		try:
 			logger.debug("Cherry-picking merge commit.")
@@ -67,14 +67,14 @@ def mirror_pr(upstream, downstream, pr_id):
 			subprocess.run(["git", "add", "-A", "."])
 
 		subprocess.run(["git", "commit", "--allow-empty", "--no-edit", "-m", original_pull.title],
-		               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+		               )
 		logger.debug("Pushing to downstream.")
 		subprocess.run(["git", "push", "downstream",
-                  f"{config.mirror_branch_prefix}{pr_id}"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                  f"{config.mirror_branch_prefix}{pr_id}"], )
 
 		logger.info("Creating pull request.")
 		result = downstream._Repository__create_pull(title=f"{config.mirror_pr_title_prefix}{original_pull.title}",
-                                               body=f"Original PR: {original_pull.html_url}\n-----\n{original_pull.body}",
+                                               body=f"Original PR: {original_pull.html_url}\n-----\n{original_pull.body.replace('@', '')}",
                                                base="master",
                                                head=f"{config.mirror_branch_prefix}{pr_id}",
                                                maintainer_can_modify=True)
@@ -100,13 +100,13 @@ def remirror_pr(upstream, downstream, mirror_pr_id):
 		clean_repo()
 		logger.debug("Switching to mirror branch.")
 		subprocess.run(["git", "checkout", "-b", f"{config.mirror_branch_prefix}{original_pull.number}"],
-		               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+		               )
 		logger.debug("Cherry-picking merge commit.")
 		subprocess.run(["git", "cherry-pick", "-m", "1", original_pull.merge_commit_sha],
-		               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+		               )
 		logger.debug("Force pushing to downstream.")
 		subprocess.run(["git", "push", "--force", "downstream",
-                  f"{config.mirror_branch_prefix}{original_pull.number}"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                  f"{config.mirror_branch_prefix}{original_pull.number}"], )
 	except:
 		logger.exception("An error occured during remirroring.")
 	finally:
