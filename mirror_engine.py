@@ -44,7 +44,7 @@ class MirrorEngine:
 				f"{config.downstream_owner}/{config.downstream_repo}")
 		except:
 			self.logger.critical(
-				"Error while obtaining upstream repository info, check if owner and repo names were entered correctly.")
+				"Error while obtaining downstream repository info, check if owner and repo names were entered correctly.")
 			sys.exit()
 
 		if not config.local_repo_directory:
