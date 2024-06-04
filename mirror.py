@@ -74,7 +74,7 @@ def mirror_pr(upstream, downstream, pr_id):
 
 		logger.info("Creating pull request.")
 		pr_body = original_pull.body if original_pull.body != None else ""
-		result = downstream.create_pull(title=f"{config.mirror_pr_title_prefix}{original_pull.title}",
+		result = downstream.create_pull(title=f"{config.mirror_pr_title_prefix}{original_pull.title} [MDB IGNORE]",
                                                body=f"Original PR: {original_pull.html_url}\n-----\n{pr_body.replace('@', '')}",
                                                base="master",
                                                head=f"{config.mirror_branch_prefix}{pr_id}",
